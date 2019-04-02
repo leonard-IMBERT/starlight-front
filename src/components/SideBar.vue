@@ -44,7 +44,7 @@ export default class SideBar extends Vue {
   private search: string = '';
 
   mounted() {
-    fetch(Requests.AllInfoRequest('http://localhost:3000')).then(d => d.json())
+    fetch(Requests.AllInfoRequest(Requests.BASE_URL)).then(d => d.json())
       .then((survs) => {
         if (!(survs instanceof Array)) throw new Error('Data is corrupted');
 

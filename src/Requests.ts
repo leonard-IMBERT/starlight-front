@@ -3,6 +3,8 @@ headers.append('Accept', 'application/json');
 
 
 export default class Requests {
+  static BASE_URL = process.env.VUE_APP_SERVER_LOCATION || 'http://localhost:3000'
+
   static MetadataRequest(baseUrl: string) {
     return new Request(`${baseUrl}/metadata`, {
       method: 'GET',

@@ -7,7 +7,7 @@ import Requests from './Requests';
 
 
 function fetchMetadata(): Promise<Metadata> {
-  return fetch(Requests.MetadataRequest('http://localhost:3000')).then(d => d.json());
+  return fetch(Requests.MetadataRequest(Requests.BASE_URL)).then(d => d.json());
 }
 
 class StarMap {

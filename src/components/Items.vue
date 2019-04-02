@@ -30,7 +30,7 @@ export default class Items extends Vue {
   private list?: List;
 
   mounted() {
-    fetch(Requests.StatsRequest('http://localhost:3000')).then(_ => _.json())
+    fetch(Requests.StatsRequest(Requests.BASE_URL)).then(_ => _.json())
       .then((data: any) => {
         Object.entries<string>(data).forEach((val: [string, string]) => {
           if (val[0] !== '') {

@@ -7,6 +7,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import StarMap from '@/StarMap';
 import Images from '@/drawer/Images';
+import Requests from '@/Requests';
 
 @Component
 export default class Map extends Vue {
@@ -20,7 +21,7 @@ export default class Map extends Vue {
     if (this.$refs.drawing instanceof HTMLCanvasElement) {
       this.starmap = new StarMap(this.$refs.drawing);
       this.map = new Images();
-      this.map.load('http://localhost:3000/map', StarMap.MAP_WIDTH, StarMap.MAP_HEIGHT, 0, 0)
+      this.map.load(`${Requests.BASE_URL}/map`, StarMap.MAP_WIDTH, StarMap.MAP_HEIGHT, 0, 0)
         .then(_ => this.starmap.setImage(this.map));
     } else {
       console.error('There is no canvas on this page');
