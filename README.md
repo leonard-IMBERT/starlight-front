@@ -25,5 +25,7 @@ npm run test
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Environment variabel
+| Name | Type | Description |
+|------|------|-------------|
+| `VUE_APP_SERVER_LOCATION` | string | Server url (for example `http://localhost:3000`) |
