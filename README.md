@@ -1,5 +1,9 @@
 # starlight-front
 
+## Requirement
+
+This project depends of nodejs > v9.x. You will also need to run the [starlight map](https://github.com/leonard-IMBERT/StarlightMap) server that will provide the necessary informations for the front to work.
+
 ## Project setup
 ```
 npm install
@@ -25,7 +29,7 @@ npm run test
 npm run lint
 ```
 
-### Environment variabel
+### Environment variables
 | Name | Type | Description |
 |------|------|-------------|
 | `VUE_APP_SERVER_LOCATION` | string | Server url (for example `http://localhost:3000`) |
