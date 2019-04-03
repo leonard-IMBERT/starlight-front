@@ -5,7 +5,7 @@ type Survivor = {
   Health: string,
   Items: string,
   Conditions: string | null,
-  Jobs: string | null,
+  Jobs: [{ Name: string, Level: string }],
   id: string | null
 }
 

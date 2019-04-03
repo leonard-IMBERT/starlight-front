@@ -50,7 +50,8 @@ function funct(str: string): (surv: Survivor) => boolean {
       case 'jobs':
         return (surv: Survivor) => value.split(',').every((job) => {
           if (surv.Jobs != null) {
-            return surv.Jobs.toLowerCase().match(job.toLowerCase()) != null;
+            return surv.Jobs.reduce((acc, j) => acc + j.Name, '')
+              .toLowerCase().match(job.toLowerCase()) != null;
           } return false;
         });
       case 'items':
@@ -94,16 +95,13 @@ export default class SideBar extends Vue {
             Health: `${inhab.Health}/${inhab.MaxHealth}`,
             Items: `(${numItems}) ${inhab.items.toString().replace(/,/g, ', ')}`,
             Conditions: null,
-            Jobs: null,
+            Jobs: inhab.jobs,
             id: uuid.v4(),
           };
 
           // Pretifiying the conditions and jobs
           if (!inhab.conditions.includes('')) {
             survivor.Conditions = inhab.conditions.toString().replace(/,/g, ', ');
-          }
-          if (!inhab.jobs.includes('')) {
-            survivor.Jobs = inhab.jobs.toString().replace(/,/g, ', ');
           }
 
           return survivor;
