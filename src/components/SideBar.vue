@@ -29,6 +29,42 @@ import Survivor from '../Survivor';
 import SurvivorComponent from './Survivor.vue';
 import Requests from '../Requests';
 
+/**
+ * Return a filtering function based on the string given
+ * keyword supported:
+ *  `@pos:x/y` : Search for all survivors in the hexagon x,y
+ *  `@job:...,...`: Search for all survivors with the given jobs
+ *  `@items: ...,...`: Search for all survivors with the given items
+ */
+function funct(str: string): (surv: Survivor) => boolean {
+  const match = str.match(/@(.*):(.*)/);
+  if (match != null) {
+    const [, fun, value] = match;
+
+    switch (fun) {
+      case 'pos':
+        return (surv: Survivor) => value.split(',').map((s) => {
+          const [x, y] = s.split('/');
+          return { x: Number(x), y: Number(y) };
+        }).find(pos => pos.x === surv.Position.x && pos.y === surv.Position.y) != null;
+      case 'jobs':
+        return (surv: Survivor) => value.split(',').every((job) => {
+          if (surv.Jobs != null) {
+            return surv.Jobs.toLowerCase().match(job.toLowerCase()) != null;
+          } return false;
+        });
+      case 'items':
+        return (surv: Survivor) => value
+          .split(',')
+          .every(item => surv.Items.toLowerCase().match(item.toLowerCase().replace('-', ' ')) != null);
+      default:
+        return () => true;
+    }
+  } else {
+    return (surv: Survivor) => surv.Name.toLowerCase().match(str.toLowerCase()) != null;
+  }
+}
+
 @Component({
   components: {
     SurvivorComponent,
@@ -75,15 +111,25 @@ export default class SideBar extends Vue {
         this.displayedSurvivors = this.survivors;
       }).catch(err => console.error(err));
     // Listen for goto
+    const beacon = document.querySelector<HTMLElement>('#beacon');
+    if (beacon instanceof HTMLElement) {
+      beacon.addEventListener('selected', (e: Event) => {
+        if (e instanceof CustomEvent && e.detail instanceof Array && e.detail.length !== 0) {
+          this.search = `@pos:${e.detail.map((p: {x: number, y: number}) => `${p.x}/${p.y}`).toString()}`;
+        } else {
+          this.search = '';
+        }
+      });
+    }
   }
 
   @Watch('search')
   onSearchChange(val: string, oldVal: string) {
-    this.displayedSurvivors = this.survivors.filter((h) => {
-      const name = h.Name.toLowerCase();
-      const search = val.toLowerCase();
-      return name.match(new RegExp(search)) != null;
-    });
+    const querys = val.split(' ');
+    this.displayedSurvivors = querys
+      .map(funct)
+      .reduce((acc: Survivor[], filter: (s: Survivor) => boolean) => acc.filter(filter),
+        this.survivors);
   }
 }
 </script>

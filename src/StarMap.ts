@@ -185,6 +185,15 @@ class StarMap {
       else h.setSelection(false);
     });
 
+    const beacon = document.querySelector<HTMLElement>('#beacon');
+
+    if (beacon instanceof HTMLElement) {
+      const poses = this.hexagons.filter(h => h.active).map(h => h.coord);
+      const ev = new CustomEvent('selected', { detail: poses, bubbles: true });
+      beacon.dispatchEvent(ev);
+    }
+
+
     this.drawMap();
   }
 
