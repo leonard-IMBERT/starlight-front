@@ -134,7 +134,7 @@ export default class SideBar extends Vue {
 
 <style lang="scss" scoped>
 ul {
-  height: calc(100% - 2rem);
+  height: calc(100% - 6rem);
   overflow-x: hidden;
   overflow-y: auto;
 }
