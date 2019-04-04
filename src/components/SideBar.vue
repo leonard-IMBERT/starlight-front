@@ -48,16 +48,11 @@ function funct(str: string): (surv: Survivor) => boolean {
           return { x: Number(x), y: Number(y) };
         }).find(pos => pos.x === surv.Position.x && pos.y === surv.Position.y) != null;
       case 'jobs':
-        return (surv: Survivor) => value.split(',').every((job) => {
-          if (surv.Jobs != null) {
-            return surv.Jobs.reduce((acc, j) => acc + j.Name, '')
-              .toLowerCase().match(job.toLowerCase()) != null;
-          } return false;
-        });
+        return (surv: Survivor) => value.split(',')
+          .every(job => surv.Jobs.reduce((acc, j) => acc + j.Name, '').toLowerCase().match(job.toLowerCase()) != null);
       case 'items':
-        return (surv: Survivor) => value
-          .split(',')
-          .every(item => surv.Items.toLowerCase().match(item.toLowerCase().replace('-', ' ')) != null);
+        return (surv: Survivor) => value.split(',')
+          .every(item => surv.Items.map(ite => ite.toLowerCase().replace(' ', '-')).find(ite => ite.match(item.toLowerCase()) != null) != null);
       default:
         return () => true;
     }
@@ -92,8 +87,8 @@ export default class SideBar extends Vue {
             Name: inhab.Name,
             Description: inhab.Description,
             Position: inhab.Position,
-            Health: `${inhab.Health}/${inhab.MaxHealth}`,
-            Items: `(${numItems}) ${inhab.items.toString().replace(/,/g, ', ')}`,
+            Health: { current: inhab.Health, max: inhab.MaxHealth },
+            Items: inhab.items,
             Conditions: null,
             Jobs: inhab.jobs,
             id: uuid.v4(),
