@@ -2,10 +2,10 @@
   <div class="container-fluid">
     <Navbar v-on:change-tab="changeTab"></Navbar>
     <div class="row">
-      <div id="sidebar" class="col-3 p-0 sidebar-sticky">
+      <div id="sidebar" class="col-sm-12 col-md-3 p-0 sidebar-sticky">
         <SideBar class="sidebar"></SideBar>
     </div>
-      <div id="content" class="col-9 ml-auto">
+      <div id="content" class="col-sm-12 col-md-9 ml-auto">
         <keep-alive>
           <component v-bind:is="content"></component>
           <!-- <Map></Map>  -->
@@ -49,5 +49,17 @@ export default class Main extends Vue {
   bottom: 0;
   left: 0;
   height: calc(100%);
+}
+@media screen and (max-width: 575.98px) {
+  .sidebar-sticky {
+    position: relative;
+    top:0;
+    height: 175px;
+    margin-bottom: -3.7rem;
+  }
+  #content {
+    margin: 0 !important;
+    width: 100%;
+  }
 }
 </style>

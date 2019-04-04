@@ -49,4 +49,11 @@ div {
   margin-left: -15px;
   margin-right: -15px;
 }
+
+@media screen and (max-width: 575.98px) {
+  div {
+      overflow: hidden;
+      height: 40rem;
+  }
+}
 </style>
