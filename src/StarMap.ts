@@ -104,7 +104,7 @@ class StarMap {
     // Check for default scale
     if (this.canvas.offsetParent instanceof HTMLElement) {
       const scale = (document.body.clientWidth - this.canvas.offsetParent.offsetLeft)
-        / this.canvas.width;
+        / StarMap.MAP_WIDTH;
       if (scale < 1) {
         if (scale <= 0) return;
         this.zoomer.scale = scale;
