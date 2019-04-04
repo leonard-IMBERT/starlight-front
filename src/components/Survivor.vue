@@ -9,7 +9,7 @@
         <li>Health: {{ survivor.Health }}</li>
         <li>Items: {{ survivor.Items }}</li>
         <li v-if="survivor.Conditions != null"> Conditions: {{ survivor.Conditions }}</li>
-        <li v-if="survivor.Jobs != null">Jobs: {{
+        <li v-if="survivor.Jobs.length != 0">Jobs: {{
           survivor.Jobs.map(job => `${job.Name} ${job.Level}`).toString()
         }}</li>
       </ul>
