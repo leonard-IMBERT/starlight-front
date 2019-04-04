@@ -7,7 +7,7 @@
         <li>Description: {{ survivor.Description }}</li>
         <li>Position: {{ survivor.Position.x }},{{ survivor.Position.y }}</li>
         <li>Health: {{ survivor.Health.current }} / {{ survivor.Health.max }}</li>
-        <li>Items: {{ survivor.Items.toString() }}</li>
+        <li>Items: ({{ survivor.Items.length }}) {{ survivor.Items.toString() }}</li>
         <li v-if="survivor.Conditions != null"> Conditions: {{ survivor.Conditions }}</li>
         <li v-if="survivor.Jobs.length != 0">Jobs: {{
           survivor.Jobs.map(job => `${job.Name} ${job.Level}`).toString()
