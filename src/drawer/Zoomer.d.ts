@@ -8,6 +8,7 @@ declare class Zoomer {
   scale: number;
   sizex: number;
   sizey: number;
+  overflow: boolean;
 
   constructor(sizex: number, sizey: number);
 

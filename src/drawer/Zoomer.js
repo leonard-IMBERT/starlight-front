@@ -23,6 +23,11 @@ export default class Zoomer {
      */
     this.scale = 1;
 
+    /**
+     * Tell if the map can overflow outside the canvas
+     */
+    this.overflow = false;
+
 
     /**
      * The x size of the original plane
@@ -57,23 +62,26 @@ export default class Zoomer {
 
   /**
    * Zoom in or out depending of the deltaZoom
-   * Cannot have a scale inferior to 1/1
    * @param {number} deltaZoom How will we zoom in or out
    */
   zoom(deltaZoom) {
     this.scale += deltaZoom;
-    this.scale = this.scale < 1 ? 1 : this.scale;
-    this.isOut();
+    if (this.overflow) {
+      this.scale = this.scale <= 0 ? this.scale + deltaZoom : this.scale;
+    } else {
+      this.scale = this.scale < 1 ? 1 : this.scale;
+      this.isOut();
+    }
   }
 
   /**
    * Set the position of the zoom within the limit of the image
    */
   isOut() {
-    if (this.offsetX < -this.limitx()) this.offsetX = -this.limitx();
     if (this.offsetX > this.limitx()) this.offsetX = this.limitx();
-    if (this.offsetY < -this.limity()) this.offsetY = -this.limity();
+    if (this.offsetX < -this.limitx()) this.offsetX = -this.limitx();
     if (this.offsetY > this.limity()) this.offsetY = this.limity();
+    if (this.offsetY < -this.limity()) this.offsetY = -this.limity();
   }
 
   /**
@@ -84,7 +92,9 @@ export default class Zoomer {
   moveZoom(dx, dy) {
     this.offsetX += dx;
     this.offsetY += dy;
-    this.isOut();
+    if (!this.overflow) {
+      this.isOut();
+    }
   }
 
   /**

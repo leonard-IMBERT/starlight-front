@@ -25,6 +25,8 @@ class StarMap {
 
   private hexagons: Hexagon[] = [];
 
+  private touchs: Touch[] = [];
+
   public static readonly MAP_WIDTH = 962;
 
   public static readonly MAP_HEIGHT = 924;
@@ -34,6 +36,31 @@ class StarMap {
     this.zoomer = new Zoomer(StarMap.MAP_WIDTH, StarMap.MAP_HEIGHT);
     this.canvas = canvas;
     this.init();
+  }
+
+  private updateTouchs(touchList: TouchList): {x: number, y: number}[] {
+    const ret: {x: number, y:number}[] = [];
+    /* Update with new touches and fill the deplacement vector */
+    Array.from(touchList).forEach((touch) => {
+      const index = this.touchs.findIndex(t => t.identifier === touch.identifier);
+      if (index >= 0) {
+        ret[touch.identifier] = {
+          x: this.touchs[index].screenX - touch.screenX,
+          y: this.touchs[index].screenY - touch.screenY,
+        };
+        this.touchs[index] = touch;
+      } else {
+        this.touchs.push(touch);
+      }
+    });
+
+    /* Clean for old touchs */
+    this.touchs
+      .filter(touch => Array
+        .from(touchList)
+        .find(t => t.identifier === touch.identifier) != null);
+
+    return ret;
   }
 
   private stillLoading(): boolean {
@@ -73,16 +100,38 @@ class StarMap {
       this.canvas.addEventListener('touchstart', (e) => {
         if (e.touches.length > 1) { return; }
         e.preventDefault();
+        this.updateTouchs(e.touches);
+        this.clicked = true;
       });
       this.canvas.addEventListener('touchmove', e => this.onMove(e));
-      this.canvas.addEventListener('touchend', e => this.onClick(e));
+      this.canvas.addEventListener('touchend', (e) => {
+        this.onClick(e);
+        this.clicked = false;
+      });
       this.canvas.addEventListener('click', e => this.onClick(e));
+      this.canvas.addEventListener('touchcancel', () => { this.clicked = false; });
       this.canvas.addEventListener('mousedown', () => { this.clicked = true; });
       this.canvas.addEventListener('mouseup', () => { this.clicked = false; });
       this.canvas.addEventListener('mouseout', () => { this.clicked = false; });
     }).then(() => {
+      this.drawer.setSize(this.map.width, this.map.height);
+      this.setScale();
       this.drawMap();
     });
+  }
+
+  public setScale(): void {
+    // Check for default scale
+    if (this.canvas.offsetParent instanceof HTMLElement) {
+      const scale = (document.body.clientWidth - this.canvas.offsetParent.offsetLeft)
+        / this.canvas.width;
+      if (scale < 1) {
+        if (scale <= 0) return;
+        this.zoomer.scale = scale;
+        this.zoomer.overflow = true;
+        this.zoomer.isOut();
+      }
+    }
   }
 
   public setImage(map: Images): StarMap {
@@ -130,6 +179,7 @@ class StarMap {
   public onMove(e: MouseEvent | TouchEvent): void {
     if (this.stillLoading()) return;
 
+
     let pos: { x: number, y: number } = { x: 0, y: 0 };
     let mov: { x: number, y: number } = { x: 0, y: 0 };
     if (e instanceof MouseEvent) {
@@ -137,10 +187,13 @@ class StarMap {
       mov = { x: -e.movementX, y: -e.movementY };
     } else if (e instanceof TouchEvent) {
       if (e.touches.length > 1) return;
-      pos = {
-        x: e.changedTouches[0].pageX,
-        y: e.changedTouches[0].pageY,
-      };
+      if (this.canvas.offsetParent instanceof HTMLElement) {
+        pos = {
+          x: e.changedTouches[0].pageX - this.canvas.offsetParent.offsetLeft,
+          y: e.changedTouches[0].pageY - this.canvas.offsetParent.offsetTop,
+        };
+      }
+      [mov] = this.updateTouchs(e.touches);
     }
 
     const { x, y } = this.translateCoordinate(pos.x, pos.y);
@@ -174,10 +227,12 @@ class StarMap {
       pos = { x: e.offsetX, y: e.offsetY };
     } else if (e instanceof TouchEvent) {
       if (e.touches.length > 1) return;
-      pos = {
-        x: e.changedTouches[0].pageX,
-        y: e.changedTouches[0].pageY,
-      };
+      if (this.canvas.offsetParent instanceof HTMLElement) {
+        pos = {
+          x: e.changedTouches[0].pageX - this.canvas.offsetParent.offsetLeft,
+          y: e.changedTouches[0].pageY - this.canvas.offsetParent.offsetTop,
+        };
+      }
     }
 
     this.hexagons.forEach((h) => {
