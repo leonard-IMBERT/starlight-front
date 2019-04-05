@@ -9,11 +9,22 @@
       >
     </div>
     <ul class="list-group">
+      <li class="list-group-item list-group-item-primary">
+        Survivors and structures
+      </li>
       <SurvivorComponent
         v-for="survivor in displayedSurvivors"
         v-bind:survivor="survivor"
         :key="survivor.id"
       ></SurvivorComponent>
+      <li class="list-group-item list-group-item-violet">
+        Magics
+      </li>
+      <MagicComponent
+        v-for="magic in displayedMagics"
+        v-bind:magic="magic"
+        :key="magic.id"
+      ></MagicComponent>
     </ul>
   </div>
 </template>
@@ -27,7 +38,9 @@ import {
 import uuid from 'uuid';
 import Survivor from '../Survivor';
 import SurvivorComponent from './Survivor.vue';
+import MagicComponent from './Magic.vue';
 import Requests from '../Requests';
+import Magic from '@/Magic';
 
 /**
  * Return a filtering function based on the string given
@@ -64,6 +77,7 @@ function funct(str: string): (surv: Survivor) => boolean {
 @Component({
   components: {
     SurvivorComponent,
+    MagicComponent,
   },
 })
 export default class SideBar extends Vue {
@@ -71,13 +85,18 @@ export default class SideBar extends Vue {
 
   private survivors: Survivor[] = [];
 
+  private magics: Magic[] = [];
+
   private displayedSurvivors: Survivor[] = [];
+
+  private displayedMagics: Magic[] = [];
 
   private search: string = '';
 
   mounted() {
     fetch(Requests.AllInfoRequest(Requests.BASE_URL)).then(d => d.json())
-      .then((survs) => {
+      .then((infos) => {
+        const survs = infos.Survivors;
         if (!(survs instanceof Array)) throw new Error('Data is corrupted');
 
         this.survivors = survs.map((inhab) => {
@@ -101,6 +120,25 @@ export default class SideBar extends Vue {
 
           return survivor;
         });
+
+        const magics = infos.Magic;
+        if (!(magics instanceof Array)) throw new Error('Data is corrupted');
+
+        this.magics = magics.map((magic) => {
+          const mag: Magic = {
+            id: uuid.v4(),
+            Name: magic.Name,
+            Constelation: magic.Constelation,
+            StarChart: magic.StarChart,
+            Spell: magic.Spell,
+            Levels: magic.Levels,
+            OmCombo: magic.OmCombo,
+          };
+
+          return mag;
+        });
+
+        this.displayedMagics = this.magics;
         this.displayedSurvivors = this.survivors;
       }).catch(err => console.error(err));
     // Listen for goto
@@ -132,5 +170,9 @@ ul {
   height: calc(100% - 6rem);
   overflow-x: hidden;
   overflow-y: auto;
+}
+.list-group-item-violet {
+  color: white;
+  background-color: #8c408c;
 }
 </style>
