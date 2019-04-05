@@ -51,4 +51,8 @@ $lightgray: #d6d6d6d6;
   float: right;
   padding: 0;
 }
+
+li {
+  overflow-wrap: break-word;
+}
 </style>
