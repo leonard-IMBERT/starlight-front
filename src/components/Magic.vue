@@ -21,7 +21,7 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import Magic from '@/Magic';
+import Magic from '../Magic';
 
 @Component({})
 export default class MagicComponent extends Vue {

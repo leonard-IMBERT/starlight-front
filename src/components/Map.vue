@@ -5,9 +5,9 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import StarMap from '@/StarMap';
-import Images from '@/drawer/Images';
-import Requests from '@/Requests';
+import StarMap from '../StarMap';
+import Images from '../drawer/Images';
+import Requests from '../Requests';
 
 @Component
 export default class Map extends Vue {

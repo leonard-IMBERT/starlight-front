@@ -20,8 +20,8 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Requests from '@/Requests';
 import List from 'list.js';
+import Requests from '../Requests';
 
 @Component
 export default class Items extends Vue {

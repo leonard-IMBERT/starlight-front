@@ -16,10 +16,10 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import SideBar from '@/components/SideBar.vue';
-import Map from '@/components/Map.vue';
-import Navbar from '@/components/Navbar.vue';
-import Items from '@/components/Items.vue';
+import SideBar from './SideBar.vue';
+import Map from './Map.vue';
+import Navbar from './Navbar.vue';
+import Items from './Items.vue';
 
 @Component({
   components: {

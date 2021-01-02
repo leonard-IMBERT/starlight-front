@@ -1,8 +1,8 @@
-import Drawer from '@/drawer/Drawer';
-import Zoomer from '@/drawer/Zoomer';
-import Images from '@/drawer/Images';
-import Metadata from '@/Metadata';
-import Hexagon from '@/hexagon/hexagon';
+import Drawer from './drawer/Drawer';
+import Zoomer from './drawer/Zoomer';
+import Images from './drawer/Images';
+import Metadata from './Metadata';
+import Hexagon from './hexagon/hexagon';
 import Requests from './Requests';
 
 

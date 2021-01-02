@@ -3,42 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "parcel build src/main.ts"
   },
   "dependencies": {
     "@types/list.js": "^1.5.1",
     "@types/uuid": "^3.4.4",
     "list.js": "^1.5.0",
     "uuid": "^3.3.2",
-    "vue": "^2.6.6",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^8.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.5.0",
-    "@vue/cli-plugin-eslint": "^3.5.0",
-    "@vue/cli-plugin-typescript": "^3.5.0",
-    "@vue/cli-service": "^3.8.0",
+    "@vue/babel-preset-app": "^4.5.9",
+    "@vue/compiler-sfc": "^3.0.5",
+    "@vue/component-compiler-utils": "^3.2.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
+    "autoprefixer": "^10.1.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "lint-staged": "^8.1.4",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.1.0",
+    "node-sass": "^5.0.0",
+    "parcel": "^2.0.0-nightly.500",
+    "postcss": "^8.2.2",
+    "sass": "^1.32.0",
     "typescript": "^3.2.1",
+    "vue": "^2.6.12",
     "vue-template-compiler": "^2.5.21"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
   }
 }

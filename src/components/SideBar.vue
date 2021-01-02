@@ -40,7 +40,7 @@ import Survivor from '../Survivor';
 import SurvivorComponent from './Survivor.vue';
 import MagicComponent from './Magic.vue';
 import Requests from '../Requests';
-import Magic from '@/Magic';
+import Magic from '../Magic';
 
 /**
  * Return a filtering function based on the string given
